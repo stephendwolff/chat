@@ -15,17 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.contrib.auth import login, logout
+import django.contrib.auth.views as auth_views
 from rest_framework_jwt.views import obtain_jwt_token
 
 from chat.views import index
 
 urlpatterns = [
     url(r'^$', index),
-    url(r'^accounts/login/$', login),
-    url(r'^accounts/logout/$', logout),
+    url(r'^accounts/login/$', auth_views.LoginView.as_view(), name='login'),
+    url(r'^accounts/logout/$', auth_views.LogoutView.as_view(), name='logout'),
+
     url(r'^admin/', admin.site.urls),
     url(r'^auth', obtain_jwt_token),
     url(r'^profile/', include(("profiles.urls", "profiles"), namespace='profiles')),
-    url(r'^chat/', include(("chat.urls","chat"), namespace='chat')),
+    url(r'^chat/', include(("chat.urls", "chat"), namespace='chat')),
 ]
